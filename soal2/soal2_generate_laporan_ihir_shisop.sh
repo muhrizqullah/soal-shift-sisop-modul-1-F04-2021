@@ -10,6 +10,46 @@ awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } { if(($18-$21) > 0 ) if( ($21/($18-$
 
 awk 'BEGIN { print "Daftar nama customer di Albuquerque pada tahun 2017 antara lain:" ; FS="\t"; OFS=","; ORS="\r\n"} {split($3, tglArr, "-"); if (tglArr[3] == 17 && $10 == "Albuquerque") print $7  }  ' /home/misdinar/Laporan-TokoShiSop.tsv | uniq > /home/misdinar/hasil.txt
 
+
+#no 2.c
+#!/bin/bash
+Consumer=0
+Corporate=0
+HomeOffice=0
+top=0
+segment="kosong"
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
+if($8=="Consumer"){
+        Consumer=(Consumer+1)
+    }
+else if($8=="Corporate"){
+        Corporate=(Corporate+1)
+    }
+else if($8=="Home Office"){
+        HomeOffice=(HomeOffice+1)
+    }
+}
+
+END{
+if(Consumer<Corporate&&Consumer<HomeOffice){
+        segment="Consumer"
+        top=Consumer
+        }
+else if(Corporate<Consumer&&Corporate<HomeOffice){
+        segment="Corporate"
+        top=Corporate
+        }
+else if(HomeOffice<Consumer&&HomeOffice<Corporate){
+        segment="Home Office"
+        top=HomeOffice
+        }
+print "Tipe segmen customer yang penjualannya paling sedikit adalah " segment " dengan " top " transaksi."
+}' ./Laporan-TokoShiSop.tsv  > /mnt/c/Users/ASUS/Downloads/sisop/hasil2.txt
+
+
+
+
 #no 2.d
 #!/bin/bash
 South=0
