@@ -13,6 +13,3 @@ Muhammad Rizqullah Akbar - 0178
 ## Soal 2
 
 ## Soal 3
-
-
-q
