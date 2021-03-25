@@ -1,1 +1,2 @@
-d
+0 20 1/7 * * /home/user/namafile.sh
+0 20 2/4 * * /home/user/namafile.sh
