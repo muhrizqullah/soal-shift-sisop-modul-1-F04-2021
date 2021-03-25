@@ -1,5 +1,3 @@
 #!bin/bash
 
-mkdir /home/gretzy/Koleksi
-
-mv
+find -type f -name '*Kelinci*' -exec mv '{}' /home/gretzy/Koleksi';'
