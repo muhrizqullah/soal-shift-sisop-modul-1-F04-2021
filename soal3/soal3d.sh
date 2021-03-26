@@ -1,3 +1,7 @@
-#!bin/bash
+#!/bin/bash
+cd /.
+cd /home/gretzy
 
-find -type f -name '*Kelinci*' -exec mv '{}' /home/gretzy/Koleksi';'
+today=$(date -d today +"%d-%m-%Y")
+
+zip -rem Koleksi.zip Kucing_* Kelinci_* $(date -d today +"%d-%m-%Y") -P "$today"
