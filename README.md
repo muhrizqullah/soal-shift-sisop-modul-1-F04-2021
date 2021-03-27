@@ -7,35 +7,7 @@
 
 # Pembahasan Soal
 ## Soal 1
-### Soal 1A
-Pada soal ini kita harus menampilkan informasi dari syslog.log yang berisikan **_Jenis Log, Pesan Log dan Username_**.
-```bash
-grep -o 'ERROR.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log
-grep -o 'INFO.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log
-```
-Kita mencari informasi yang dibutuhkan dengan menggunakan `grep` dimana `-o 'ERROR.*'` adalah setiap kalimat pada sebuah line yang mengandung kata **ERROR** diawalnya. Begitu juga dengan **INFO**.
-### Soal 1B
-Pada soal ini kita harus menampilkan informasi **Jumlah Jenis ERROR yang muncul**.
-```bash
-grep -o 'Time.*information' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
-grep -o 'Connect.*failed' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
-grep -o 'Tried.*ticket' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
-grep -o 'Permission.*ticket' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
-grep -o 'The.*updating' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
-grep -o 'Ticket.*exist' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
 
-```
-Masih menggunakan `grep` kita mencari tiap jenis error dengan `-o 'Time.*information'` dimana mencari kalimat pada sebuah line yang diawali *Time* dan diakihiri *information*. Begitu juga untuk jenis ERROR lainnya.
-### Soal 1C
-Pada soal ini kita harus menampilkan informasi **Berapa kali tiap user mendapati ERROR dan INFO**.
-```bash
-grep -o 'ERROR.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listerror.log
-grep -o '(.*)' /home/gretzy/listerror.log | sort | uniq -c
-
-grep -o 'INFO.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listinfo.log
-grep -o '(.*)' /home/gretzy/listinfo.log | sort | uniq -c
-```
-Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan menyimpannya pada sebuah file. Lalu menggunakan `-o '(.*)'` untuk mendapat informasi nama user. Selanjutnya kita `sort` dan menghitung kemunculan tiap user dengan `uniq -c`.
 ## Soal 2
 ### Soal 2A
 Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
@@ -302,3 +274,29 @@ mv /home/gretzy/Foto.log /home/gretzy/Kelinci_$(date +%d-%m-%Y)
 fi
 ```
 Dan berlaku juga untuk sebaliknya, jika foto kucing yang telah diunduh kemarin maka hari ini script akan mengunduh foto kelinci dengan _command_ yang sama seperti yang sudah dijelaskan sebelumnya
+
+### Soal 3d
+
+Soal ini ingin **memindahkan seluruh folder ke zip** yang diberi nama “Koleksi.zip” dan *mengunci* zip tersebut dengan **password** berupa tanggal saat ini dengan format "MMDDYYYY"
+```bash
+#!/bin/bash
+cd /.
+cd /home/gretzy
+
+today=$(date -d today +"%d-%m-%Y")
+
+zip -rem Koleksi.zip Kucing_* Kelinci_* $(date -d today +"%d-%m-%Y") -P "$today"
+```
+Untuk memudahkan penulisan password, password(tanggal hari ini) dimasukkan ke variabel today. 
+```bash
+today=$(date -d today +"%d-%m-%Y")
+```
+Sebelum command dijalankan ,pindah ke directory /home/user terlebih dahulu 
+```bash
+cd /.
+cd /home/gretzy
+```
+Kemudian file dengan pattern kucing dan kelinci dengan tanggal hari ini diubah formatnya menjadi zip kemudian diberi password hari ini . Kemudian file sebelumnya dihapus
+```bash
+zip -rem Koleksi.zip Kucing_* Kelinci_* $(date -d today +"%d-%m-%Y") -P "$today"
+```
