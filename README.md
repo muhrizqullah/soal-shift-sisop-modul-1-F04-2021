@@ -189,3 +189,39 @@ done
 Karena ada kemungkinan foto yang diunduh merupakan foto yang sama, maka perlu menghapus foto yang duplikat dengan menggunakan ```fdupes```
 ```bash
 fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+### Soal 3b
+Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
+```bash
+#!/bin/bash
+
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    mv Koleksi_0$count /home/gretzy/$(date +%d-%m-%Y)
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    mv Koleksi_$count /home/gretzy/$(date +%d-%m-%Y)
+    let count=count+1
+done
+
+fdupes -N -d /home/gretzy/$(date +%d-%m-%Y)
+```
+Karena harus memindahkan ke foldere yang diminta, maka script diberi tambahan _command_ ```mv```
+```bash
+mv Koleksi_0$count /home/gretzy/$(date +%d-%m-%Y)
+```
+dan
+```bash
+mv Koleksi_$count /home/gretzy/$(date +%d-%m-%Y)
+```
+Untuk membuat membuat jadwal seperti pada soal, dapat menggunakan crontab untuk menjalankan script yang telah dibuat.
+```
+0 20 1/7,2/7 * * bash /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal3/soal3b.sh
+```
