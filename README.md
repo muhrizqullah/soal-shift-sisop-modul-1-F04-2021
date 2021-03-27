@@ -189,6 +189,7 @@ done
 Karena ada kemungkinan foto yang diunduh merupakan foto yang sama, maka perlu menghapus foto yang duplikat dengan menggunakan ```fdupes```
 ```bash
 fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+```
 ### Soal 3b
 Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
 ```bash
