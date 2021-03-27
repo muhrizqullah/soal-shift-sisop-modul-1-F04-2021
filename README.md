@@ -300,3 +300,18 @@ Kemudian file dengan pattern kucing dan kelinci dengan tanggal hari ini diubah f
 ```bash
 zip -rem Koleksi.zip Kucing_* Kelinci_* $(date -d today +"%d-%m-%Y") -P "$today"
 ```
+### soal 3e
+Untuk Soal ini diminta untuk membuat script pada soal 3d berjalan sesuai jadwal yang diminta dan juga menjalankan perintah untuk **un-zip** file yang telah di zip dari script pada soal 3d
+```
+0 18 * * 1-5 unzip -P `date "+\%d-\%m-\%Y"` /home/gretzy/Koleksi.zip && rm /home/gretzy/Koleksi.zip
+
+0 7 * * 1-5 bash ~/soal-shift-sisop-modul-1-F04-2021/soal3/soal3d.sh
+```
+_Command_ ini membuat jadwal setiap pagi jam 7.00 di hari senin-jumat untuk menbuat file ```.zip```  dari folder koleksi foto dengan cara menjalankan script yang telah dibuat pada soal 3d
+```
+0 7 * * 1-5 bash ~/soal-shift-sisop-modul-1-F04-2021/soal3/soal3d.sh
+```
+Dan _Command_ dibawah ini ini membuat jadwal setiap sore jam 18.00 di hari senin-jumat untuk membuka zip (un-zip) dari folder koleksi foto dengan cara menjalankan _Command_ ```unzip``` dengan ```-p``` untuk membuka file zip yang memiliki password dan hasil ekstrak file ```.zip```  tersebut disimpan di folder yang dituju serta ```rm``` menghapus  file ```.zip``` yang teah dibuat sebelumnya
+```
+0 18 * * 1-5 unzip -P `date "+\%d-\%m-\%Y"` /home/gretzy/Koleksi.zip && rm /h
+```
