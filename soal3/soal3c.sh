@@ -1,8 +1,6 @@
 #!/bin/bash
 
 yesterday=$(date -d yesterday +"%d-%m-%Y")
-today=$(date -d today +"%d-%m-%Y")
-
 
 if [ -d /home/gretzy/"Kelinci_$yesterday" ]
 then
