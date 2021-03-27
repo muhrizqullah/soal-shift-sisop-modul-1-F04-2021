@@ -313,5 +313,6 @@ _Command_ ini membuat jadwal setiap pagi jam 7.00 di hari senin-jumat untuk menb
 ```
 Dan _Command_ dibawah ini ini membuat jadwal setiap sore jam 18.00 di hari senin-jumat untuk membuka zip (un-zip) dari folder koleksi foto dengan cara menjalankan _Command_ ```unzip``` dengan ```-p``` untuk membuka file zip yang memiliki password dan hasil ekstrak file ```.zip```  tersebut disimpan di folder yang dituju serta ```rm``` menghapus  file ```.zip``` yang teah dibuat sebelumnya
 ```
-0 18 * * 1-5 unzip -P `date "+\%d-\%m-\%Y"` /home/gretzy/Koleksi.zip && rm /h
+0 18 * * 1-5 unzip -P `date "+\%d-\%m-\%Y"` /home/gretzy/Koleksi.zip && rm /home/gretzy/Koleksi.zip
+```
 ```
