@@ -144,3 +144,48 @@ paling sedikit adalah East dengan total keuntungan -2268
 
 ```
 ## Soal 3
+### Soal 3a
+Soal ini diminta membuat script untuk **Mengunduh** foto pada link yang diberikan, **Menyimpan Log**, dan **menghapus** foto yang sama.
+
+```bash
+#!/bin/bash
+
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+```
+Pada awalnya script akan membuat folder dengan ```mkdir``` untuk menjadi direktori penyimpanan gambar
+```bash
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+```
+Kemudian dengan ```while```, script akan mulai mengunduh sebanyak 23 foto. Terdapat 2 pengulangan dimana pengulangan pertama yaitu dari satu sampai sembilan dan yang kedua yaitu dari 10 hingga 23. Pengulangan tersebut dilakukan untuk menyimpan foto yang telah diunduh dengan format nama yang telah ditentukan
+```bash
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+```
+Karena ada kemungkinan foto yang diunduh merupakan foto yang sama, maka perlu menghapus foto yang duplikat dengan menggunakan ```fdupes```
+```bash
+fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
