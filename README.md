@@ -81,4 +81,66 @@ else if(HomeOffice<Consumer&&HomeOffice<Corporate){
 print "\nTipe segmen customer yang penjualannya paling sedikit adalah " segment "\ndengan " top " transaksi."
 }' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
+Pertama kita melakukan perhitungan dari transaksi yang berlangsung pada tiap segmennya. Lalu akan mengecek mana yang paling kecil dan menjadikannya sebagai output.
+### Soal 2D
+Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**
+```bash
+South=0
+West=0
+East=0
+Central=0;
+top=10000000000000000000000000000000000
+wilayah="a"
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
+if(top>South){
+  wilayah="South"
+  top=South
+}
+else if(top>West){
+  wilayah="West"
+  top=West
+}
+else if(top>East){
+  wilayah="East"
+  top=East
+}
+else if(top>Central){
+ wilayah="Central"
+ top=Central
+}
+else if($13=="South")
+    South=South+$21;
+else if($13=="West")
+    West=West+$21;
+else if($13=="East")
+     East=East+$21;
+else if($13=="Central")
+      Central=Central+$21;
+}
+
+END{
+print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " wilayah " dengan total keuntungan " top
+}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Sama seperti soal sebelumnya, akan dilakukan perhitungan lalu dicek mana Region yang menghasilkan profit paling kecil untuk dijadikan sebagai output.
+### Soal 2E
+Menampilkan output pada file hasil.txt
+```
+Transaksi terakhir dengan profit percentage terbesar yaitu 9994
+dengan persentase 100%.
+
+Daftar nama customer di Albuquerque pada tahun 2017 antara lain:
+Michelle Lonsdale
+Benjamin Farhat
+David Wiener
+Susan Vittorini
+
+Tipe segmen customer yang penjualannya paling sedikit adalah Home Office
+dengan 1783 transaksi.
+
+Wilayah bagian (region) yang memiliki total keuntungan (profit) yang
+paling sedikit adalah East dengan total keuntungan -2268
+
+```
 ## Soal 3
