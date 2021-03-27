@@ -226,3 +226,51 @@ Untuk membuat membuat jadwal seperti pada soal, dapat menggunakan crontab untuk 
 ```
 0 20 1/7,2/7 * * bash /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal3/soal3b.sh
 ```
+### Soal 3c
+Soal ini ingin **mengunduh** 2 jenis foto yang berbeda(kucing dan kelinci) secara **bergantian** setiap harinya dan hasil unduhan disimpan dengan nama folder sesuai dengan jenis hewannya beserta tanggal mengunduhnya
+```bash
+#!/bin/bash
+
+yesterday=$(date -d yesterday +"%d-%m-%Y")
+today=$(date -d today +"%d-%m-%Y")
+
+
+if [ -d /home/gretzy/"Kelinci_$yesterday" ]
+then
+mkdir /home/gretzy/Kucing_$(date +%d-%m-%Y)
+wget https://loremflickr.com/320/240/kitten -O Foto_Kucing  2>> /home/gretzy/Foto.log
+mv Foto_Kucing /home/gretzy/Kucing_$(date +%d-%m-%Y)/Foto_Kucing_$(date +%T)
+mv /home/gretzy/Foto.log /home/gretzy/Kucing_$(date +%d-%m-%Y)
+else
+mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+wget https://loremflickr.com/320/240/bunny -O Foto_Kelinci  2>> /home/gretzy/Foto.log
+mv Foto_Kelinci /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto_Kelinci_$(date +%T)
+mv /home/gretzy/Foto.log /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+fi
+```
+Untuk memudahkan melakukan pengecekan terhadap jenis hewan yang telah diunduh pada hari sebelumnya, maka dilakukan inisiasi untuk tanggal hari ini dan kemarin
+```bash
+yesterday=$(date -d yesterday +"%d-%m-%Y")
+today=$(date -d today +"%d-%m-%Y")
+```
+Dari ```yesterday``` maka dapat diperiksa foto jenis hewan apa yang telah diunduh pada hari sebelumnya.
+```bash
+if [ -d /home/gretzy/"Kelinci_$yesterday" ]
+```
+Kelompok kami memilih untuk memeriksa file yang telah diunduh kemarin merupakan foto kelinci atau bukan. kondisi ini masih dapat disesuaikan dengan keinginan programmernya. Jika kemarin script mengunduh foto kelinci, maka hari ini script akan mengunduh foto kucing
+```bash
+mkdir /home/gretzy/Kucing_$(date +%d-%m-%Y)
+wget https://loremflickr.com/320/240/kitten -O Foto_Kucing  2>> /home/gretzy/Foto.log
+mv Foto_Kucing /home/gretzy/Kucing_$(date +%d-%m-%Y)/Foto_Kucing_$(date +%T)
+mv /home/gretzy/Foto.log /home/gretzy/Kucing_$(date +%d-%m-%Y)
+```
+Proses pengunduhannya dimulai dengan ```mkdir``` untuk membuat folder penyimpanan dengan format nama yang telah ditentukan (jenis hewan_tanggal). Kemudian mengunduh foto dari link yang telah disediakan dan semuanya dicatat di file ```.log```. Dan Terakhir memindahkan foto yang diunduh dan file ```.log``` kefolder yang sesuai.
+```bash
+else
+mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+wget https://loremflickr.com/320/240/bunny -O Foto_Kelinci  2>> /home/gretzy/Foto.log
+mv Foto_Kelinci /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto_Kelinci_$(date +%T)
+mv /home/gretzy/Foto.log /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+fi
+```
+Dan berlaku juga untuk sebaliknya, jika foto kucing yang telah diunduh kemarin maka hari ini script akan mengunduh foto kelinci dengan _command_ yang sama seperti yang sudah dijelaskan sebelumnya
