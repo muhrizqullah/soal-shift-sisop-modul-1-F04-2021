@@ -1,15 +1,228 @@
 # soal-shift-sisop-modul-1-F04-2021
 
 ## Anggota Kelompok
-Thomas Dwi Awaka - 0021
-
-Muhammad Arifiansyah - 0027
-
-Muhammad Rizqullah Akbar - 0178
+- **Thomas Dwi Awaka** (05111940000021)
+- **Muhammad Arifiansyah** (05111940000027)
+- **Muhammad Rizqullah Akbar** (05111940000178)
 
 # Pembahasan Soal
 ## Soal 1
 
 ## Soal 2
+### Soal 2A
+Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
+```bash
+#!/bin/bash
 
+max=0
+ID=0
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } 
+{ if(($18-$21) > 0 ) if( ($21/($18-$21)) > max) max=$21/($18-$21);ID=$1} 
+END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
+/home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Untuk mencari profit percentage dan ID, maka perlu memisahkan setiap kolom dari data yang telah disediakan dan mulai mencari data sesuai dengan soal yang diberikan. Pertama, variabel ``max`` dan ``ID`` di set 0 sebagai inisiasi.
+```awk
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } 
+```
+_Command_ diatas mencari _File Separator_ dari file ```.tsv``` yang telah disediakan (yaitu tab atau "\t") dan merubah _Output File Separator_ dengan tanda koma (",") serta untuk _Output Record Separtor_ diatur agar setiap field diberi newline.
+```awk
+{ if(($18-$21) > 0 ) if( ($21/($18-$21)) > max) max=$21/($18-$21);ID=$1}
+```
+Cara untuk mencari profit dan ID ialah dengan menggunakan rumus yang tertera pada soal dan membandingkannya pada setiap field. Jika memenuhi kondisi if tersebut, maka program akan menyimpan nilai profit dan ID tersebut.
+```awk
+END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
+/home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Diakhir program akan mencetak output seperti yang diminta dan menyimpan output tersebut ke ```hasil.txt```
+
+### Soal 2B
+Pada soal ini kita mencari **Nama customer yang melakukan transaksi pada tahun _2017_ di _Albuquerque_**.
+```bash
+awk 'BEGIN { print "\nDaftar nama customer di Albuquerque pada tahun 2017 antara lain:" ; FS="\t"; OFS=","; ORS="\r\n"} 
+{split($3, tglArr, "-"); if (tglArr[3] == 17 && $10 == "Albuquerque") print $7  }  ' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv | uniq >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Menggunakan fungsi `split` kita bisa mengambil informasi tahunnya saja dari tanggal. Lalu menggunakan `uniq` agar tidak ada redundan pada output yang diberikan.
+### Soal 2C
+Pada soal ini kita mencari **Segmen dengan penjualan _paling sedikit_ dan jumlah transaksinya**
+```bash
+Consumer=0
+Corporate=0
+HomeOffice=0
+top=0
+segment="kosong"
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
+if($8=="Consumer"){
+        Consumer=(Consumer+1)
+    }
+else if($8=="Corporate"){
+        Corporate=(Corporate+1)
+    }
+else if($8=="Home Office"){
+        HomeOffice=(HomeOffice+1)
+    }
+}
+
+END{
+if(Consumer<Corporate&&Consumer<HomeOffice){
+        segment="Consumer"
+        top=Consumer
+        }
+else if(Corporate<Consumer&&Corporate<HomeOffice){
+        segment="Corporate"
+        top=Corporate
+        }
+else if(HomeOffice<Consumer&&HomeOffice<Corporate){
+        segment="Home Office"
+        top=HomeOffice
+        }
+print "\nTipe segmen customer yang penjualannya paling sedikit adalah " segment "\ndengan " top " transaksi."
+}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Pertama kita melakukan perhitungan dari transaksi yang berlangsung pada tiap segmennya. Lalu akan mengecek mana yang paling kecil dan menjadikannya sebagai output.
+### Soal 2D
+Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**
+```bash
+South=0
+West=0
+East=0
+Central=0;
+top=10000000000000000000000000000000000
+wilayah="a"
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
+if(top>South){
+  wilayah="South"
+  top=South
+}
+else if(top>West){
+  wilayah="West"
+  top=West
+}
+else if(top>East){
+  wilayah="East"
+  top=East
+}
+else if(top>Central){
+ wilayah="Central"
+ top=Central
+}
+else if($13=="South")
+    South=South+$21;
+else if($13=="West")
+    West=West+$21;
+else if($13=="East")
+     East=East+$21;
+else if($13=="Central")
+      Central=Central+$21;
+}
+
+END{
+print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " wilayah " dengan total keuntungan " top
+}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Sama seperti soal sebelumnya, akan dilakukan perhitungan lalu dicek mana Region yang menghasilkan profit paling kecil untuk dijadikan sebagai output.
+### Soal 2E
+Menampilkan output pada file hasil.txt
+```
+Transaksi terakhir dengan profit percentage terbesar yaitu 9994
+dengan persentase 100%.
+
+Daftar nama customer di Albuquerque pada tahun 2017 antara lain:
+Michelle Lonsdale
+Benjamin Farhat
+David Wiener
+Susan Vittorini
+
+Tipe segmen customer yang penjualannya paling sedikit adalah Home Office
+dengan 1783 transaksi.
+
+Wilayah bagian (region) yang memiliki total keuntungan (profit) yang
+paling sedikit adalah East dengan total keuntungan -2268
+
+```
 ## Soal 3
+### Soal 3a
+Soal ini diminta membuat script untuk **Mengunduh** foto pada link yang diberikan, **Menyimpan Log**, dan **menghapus** foto yang sama.
+
+```bash
+#!/bin/bash
+
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+```
+Pada awalnya script akan membuat folder dengan ```mkdir``` untuk menjadi direktori penyimpanan gambar
+```bash
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+```
+Kemudian dengan ```while```, script akan mulai mengunduh sebanyak 23 foto. Terdapat 2 pengulangan dimana pengulangan pertama yaitu dari satu sampai sembilan dan yang kedua yaitu dari 10 hingga 23. Pengulangan tersebut dilakukan untuk menyimpan foto yang telah diunduh dengan format nama yang telah ditentukan
+```bash
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    let count=count+1
+done
+```
+Karena ada kemungkinan foto yang diunduh merupakan foto yang sama, maka perlu menghapus foto yang duplikat dengan menggunakan ```fdupes```
+```bash
+fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+```
+### Soal 3b
+Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
+```bash
+#!/bin/bash
+
+mkdir /home/gretzy/$(date +%d-%m-%Y)
+
+count=1
+while [ $count -lt 10 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    mv Koleksi_0$count /home/gretzy/$(date +%d-%m-%Y)
+    let count=count+1
+done
+
+while [ $count -le 23 ]
+do
+    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
+    mv Koleksi_$count /home/gretzy/$(date +%d-%m-%Y)
+    let count=count+1
+done
+
+fdupes -N -d /home/gretzy/$(date +%d-%m-%Y)
+```
+Karena harus memindahkan ke foldere yang diminta, maka script diberi tambahan _command_ ```mv```
+```bash
+mv Koleksi_0$count /home/gretzy/$(date +%d-%m-%Y)
+```
+dan
+```bash
+mv Koleksi_$count /home/gretzy/$(date +%d-%m-%Y)
+```
+Untuk membuat membuat jadwal seperti pada soal, dapat menggunakan crontab untuk menjalankan script yang telah dibuat.
+```
+0 20 1/7,2/7 * * bash /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal3/soal3b.sh
+```
