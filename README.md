@@ -10,7 +10,7 @@
 
 ## Soal 2
 ### Soal 2A
-Pada soal ini kita mencari **Jumlah _profit percentage terbesar_** dan **_ID Transaksi_**.
+Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
 ```bash
 #!/bin/bash
 
@@ -22,7 +22,21 @@ awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" }
 END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
 /home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
-Nilai dari variabel ``max`` dan ``ID`` di set 0 sebagai inisiasi. Kemudian menggunakan ``awk`` untuk operasi file dan mencari _profit percentage_ terbesar serta _ID Transaksi_.
+Untuk mencari profit percentage dan ID, maka perlu memisahkan setiap kolom dari data yang telah disediakan dan mulai mencari data sesuai dengan soal yang diberikan. Pertama, variabel ``max`` dan ``ID`` di set 0 sebagai inisiasi.
+```awk
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } 
+```
+_Command_ diatas mencari _File Separator_ dari file ```.tsv``` yang telah disediakan (yaitu tab atau "\t") dan merubah _Output File Separator_ dengan tanda koma (",") serta untuk _Output Record Separtor_ diatur agar setiap field diberi newline.
+```awk
+{ if(($18-$21) > 0 ) if( ($21/($18-$21)) > max) max=$21/($18-$21);ID=$1}
+```
+Cara untuk mencari profit dan ID ialah dengan menggunakan rumus yang tertera pada soal dan membandingkannya pada setiap field. Jika memenuhi kondisi if tersebut, maka program akan menyimpan nilai profit dan ID tersebut.
+```awk
+END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
+/home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+```
+Diakhir program akan mencetak output seperti yang diminta dan menyimpan output tersebut ke ```hasil.txt```
+
 ### Soal 2B
 Pada soal ini kita mencari **Nama customer yang melakukan transaksi pada tahun _2017_ di _Albuquerque_**.
 ```bash
