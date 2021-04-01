@@ -31,7 +31,7 @@ grep -o 'Ticket.*exist' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq 
 ```
 Masih menggunakan `grep` kita mencari tiap jenis error dengan `-o 'Time.*information'` dimana mencari kalimat pada sebuah line yang diawali *Time* dan diakihiri *information*. Begitu juga untuk jenis ERROR lainnya.
 
-<img alt="Output 1A" src="Foto/1B.png">
+<img alt="Output 1B" src="Foto/1B.png">
 
 #### Kendala
 Kesulitan untuk melakukan perhitungan tiap jenis *ERROR*, solusinya menggunakan `uniq -c`.
@@ -46,7 +46,7 @@ grep -o '(.*)' /home/gretzy/listinfo.log | sort | uniq -c
 ```
 Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan menyimpannya pada sebuah file. Lalu menggunakan `-o '(.*)'` untuk mendapat informasi nama user. Selanjutnya kita `sort` dan menghitung kemunculan tiap user dengan `uniq -c`. Output langsung untuk *ERROR* dan *INFO* denga user pertama adalah `(ac)`.
 
-<img alt="Output 1A" src="Foto/1C.png">
+<img alt="Output 1C" src="Foto/1C.png">
 
 #### Kendala
 Kesulitan untuk memisahkan *ERROR* dan *INFO*, solusinya ditaruh disebuah file terelbih dahulu.
