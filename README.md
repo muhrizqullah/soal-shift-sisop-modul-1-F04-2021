@@ -17,6 +17,8 @@ Kita mencari informasi yang dibutuhkan dengan menggunakan `grep` dimana `-o 'ERR
 
 <img alt="Output 1A" src="Foto/1A.png">
 
+#### Kendala
+Kesulitan untuk melakukan operasi file tanpa *AWK* dan juga pencarian kata menggunakan *REGEXP*.
 ### Soal 1B
 Pada soal ini kita harus menampilkan informasi **Jumlah Jenis ERROR yang muncul**.
 ```bash
@@ -31,6 +33,9 @@ Masih menggunakan `grep` kita mencari tiap jenis error dengan `-o 'Time.*informa
 
 <img alt="Output 1A" src="Foto/1B.png">
 
+#### Kendala
+Kesulitan untuk melakukan perhitungan tiap jenis *ERROR*, solusinya menggunakan `uniq -c`.
+
 ### Soal 1C
 Pada soal ini kita harus menampilkan informasi **Berapa kali tiap user mendapati ERROR dan INFO**.
 ```bash
@@ -42,6 +47,9 @@ grep -o '(.*)' /home/gretzy/listinfo.log | sort | uniq -c
 Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan menyimpannya pada sebuah file. Lalu menggunakan `-o '(.*)'` untuk mendapat informasi nama user. Selanjutnya kita `sort` dan menghitung kemunculan tiap user dengan `uniq -c`. Output langsung untuk *ERROR* dan *INFO* denga user pertama adalah `(ac)`.
 
 <img alt="Output 1A" src="Foto/1C.png">
+
+#### Kendala
+Kesulitan untuk memisahkan *ERROR* dan *INFO*, solusinya ditaruh disebuah file terelbih dahulu.
 
 ## Soal 2
 ### Soal 2A

@@ -55,36 +55,31 @@ South=0
 West=0
 East=0
 Central=0;
-top=10000000000000000000000000000000000
-wilayah="a"
+min=0
+Wilayah="a"
 
 awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
-if(top>South){
-  wilayah="South"
-  top=South
+if($13=="South")South=South+$21;
+else if($13=="West")West=West+$21;
+else if($13=="East")East=East+$21;
+else if($13=="Central")Central=Central+$21;
 }
-else if(top>West){
-  wilayah="West"
-  top=West
-}
-else if(top>East){
-  wilayah="East"
-  top=East
-}
-else if(top>Central){
- wilayah="Central"
- top=Central
-}
-else if($13=="South")
-    South=South+$21;
-else if($13=="West")
-    West=West+$21;
-else if($13=="East")
-     East=East+$21;
-else if($13=="Central")
-      Central=Central+$21;
-}
-
 END{
-print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " wilayah " dengan total keuntungan " top
+if(West<South&&West<East&&West<Central){
+	Wilayah="West"
+	min=West
+	}
+else if(South<West&&South<East&&South<Central){
+	Wilayah="South"
+	min=South
+	}
+else if(East<South&&East<West&&East<Central){
+	Wilayah="East"
+	min=East
+	}
+else if(Central<South&&Central<West&&Central<East){
+	Wilayah="Central"
+	min=Central
+	}
+print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " Wilayah " dengan total keuntungan " min
 }' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
