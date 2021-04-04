@@ -126,7 +126,7 @@ print "\nTipe segmen customer yang penjualannya paling sedikit adalah " segment 
 ```
 Pertama kita melakukan perhitungan dari transaksi yang berlangsung pada tiap segmennya. Lalu akan mengecek mana yang paling kecil dan menjadikannya sebagai output.
 ### Soal 2D
-Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**
+Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**. Variabel **South,West,East,Central** tersebut digunakan untuk menyimpan total profit region tersebut. Kemudian **min** kita gunakan untuk menyimpan **profit region terlendah** & **Wilayah** untuk menyimpan **nama region terendah**
 ```bash
 #!/bin/bash
 
