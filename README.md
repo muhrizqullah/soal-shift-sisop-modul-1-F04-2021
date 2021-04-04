@@ -159,7 +159,7 @@ END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\nde
 ```
 Untuk mencari profit percentage dan ID, maka perlu memisahkan setiap kolom dari data yang telah disediakan dan mulai mencari data sesuai dengan soal yang diberikan. Pertama, variabel ``max`` dan ``ID`` di set 0 sebagai inisiasi.
 ```awk
-awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } 
+awk 'BEGIN { FS="\t"; ORS="\r\n"; max=0; ID=0 } 
 ```
 _Command_ diatas mencari _File Separator_ dari file ```.tsv``` yang telah disediakan (yaitu tab atau "\t") dan merubah _Output File Separator_ dengan tanda koma (",") serta untuk _Output Record Separtor_ diatur agar setiap field diberi newline.
 ```awk
