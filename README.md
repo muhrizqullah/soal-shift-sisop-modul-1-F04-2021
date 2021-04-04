@@ -306,26 +306,10 @@ else if(Central<South&&Central<West&&Central<East){
 print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " Wilayah " dengan total keuntungan " min
 ```
 
-
 ### Soal 2E
 Menampilkan output pada file hasil.txt
-```
-Transaksi terakhir dengan profit percentage terbesar yaitu 9952
-dengan persentase 100%.
+<img alt="Output 2" src="Foto/2.png">
 
-Daftar nama customer di Albuquerque pada tahun 2017 antara lain:
-Michelle Lonsdale
-Benjamin Farhat
-David Wiener
-Susan Vittorini
-
-Tipe segmen customer yang penjualannya paling sedikit adalah Home Office
-dengan 1783 transaksi.
-
-Wilayah bagian (region) yang memiliki total keuntungan (profit) yang
-paling sedikit adalah Central dengan total keuntungan 39706.4
-
-```
 ## Soal 3
 ### Soal 3a
 Soal ini diminta membuat script untuk **Mengunduh** foto pada link yang diberikan, **Menyimpan Log**, dan **menghapus** foto yang sama.
