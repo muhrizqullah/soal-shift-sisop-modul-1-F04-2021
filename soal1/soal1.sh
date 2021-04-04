@@ -33,3 +33,14 @@ errCount=`grep -c 'The.*updating' /home/misdinar/Sisop1/modul1/soal1/syslog.log 
 printf "The ticket was modified while updating,$errCount\n" >> error_message.csv
 errCount=`grep -c 'Ticket.*exist' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
 printf "Ticket doesn't exist,$errCount\n" >> error_message.csv
+
+#1e
+echo Username,INFO,ERROR > user_statistic.csv
+listnama=$(grep -oE '(\(.*\))' syslog.log | tr -d ')' | tr -d '(' | sort | uniq)
+echo "$listnama" |
+while read user
+do
+    Info=$(grep -c "INFO.*($user)" syslog.log)
+    Error=$(grep -c "ERROR.*($user)" syslog.log)
+    echo "$user,$Info,$Error" >> user_statistic.csv
+done
