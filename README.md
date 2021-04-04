@@ -54,6 +54,46 @@ Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan me
 #### Kendala
 Kesulitan untuk memisahkan *ERROR* dan *INFO*, solusinya ditaruh disebuah file terelbih dahulu.
 
+### Soal 1D
+Soal ini meminta untuk menulis output soal b dengan header "Error,Count" yang diikuti dengan daftar pesan error dan jumlah kemunculannya yang telah terurut dari yang terbesar. Seperti contoh berikut:
+```
+Error,Count
+Permission denied,5
+File not found,3
+Failed to connect to DB,2
+```
+Dengan menggunakan algoritma yang dipakai di soal 1b, maka untuk penyelesaian soal 1d adalah sebagai berikut,
+```bash
+echo "Error,Count" > error_message.csv
+errCount=`grep -c 'Time.*information' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq `
+printf "Timeout while retrieving information,$errCount\n" >> error_message.csv
+errCount=`grep -c 'Connect.*failed' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
+printf "Connection to DB failed,$errCount\n" >> error_message.csv
+errCount=`grep -c 'Tried.*ticket' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
+printf "Tried to add information to closed ticket,$errCount\n" >> error_message.csv
+errCount=`grep -c 'Permission.*ticket' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
+printf "Permission denied while closing ticket,$errCount\n" >> error_message.csv
+errCount=`grep -c 'The.*updating' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
+printf "The ticket was modified while updating,$errCount\n" >> error_message.csv
+errCount=`grep -c 'Ticket.*exist' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq`
+printf "Ticket doesn't exist,$errCount\n" >> error_message.csv
+```
+Diawali dengan membuat header untuk file .csv
+```
+echo "Error,Count" > error_message.csv
+```
+Kemudian menggunakan ```grep -c``` untuk mengitung jumlah dari setiap error yang diketahui. Untuk menghitung jumlah Error ```Timeout while retrieving information```,maka di jumlah error tersebut akan disimpan di ```errCount``` dan dicetak di file .csv yang diminta. Berikut implementasinya
+```bash
+errCount=`grep -c 'Time.*information' /home/misdinar/Sisop1/modul1/soal1/syslog.log | uniq `
+printf "Timeout while retrieving information,$errCount\n" >> error_message.csv
+```
+Cara ini juga berlaku untuk jenis error lainnya.
+
+<img alt="Output 1D" src="Foto/1C.png">
+
+#### Kendala
+Masih belum mengetahui cara menyimpan list nama setiap jenis Error yang ada
+
 ## Soal 2
 ### Soal 2A
 Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
