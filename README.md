@@ -313,50 +313,70 @@ Menampilkan output pada file hasil.txt
 ## Soal 3
 ### Soal 3a
 Soal ini diminta membuat script untuk **Mengunduh** foto pada link yang diberikan, **Menyimpan Log**, dan **menghapus** foto yang sama.
-
 ```bash
 #!/bin/bash
 
-mkdir /home/gretzy/$(date +%d-%m-%Y)
-
-count=1
-while [ $count -lt 10 ]
+hashList=( $(for x in {1..23};do echo "0";done) )
+n=23
+for ((count=1;count<=n; count=count+1))
 do
-    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
-    let count=count+1
-done
+    i=$(printf "%02d" $count) 
 
-while [ $count -le 23 ]
-do
-    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
-    let count=count+1
-done
+    wget https://loremflickr.com/320/240/kitten -O "Koleksi_$i" 2>> Foto.log
 
-fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
+    ## Mendapatkan hash dari gambar yang baru di download
+    hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
+
+    ## Mencari Hash yang sama
+    for ((j=count-1;j>=1;j=j-1))
+    do
+        if [[ "${hashList[$count]}" == "${hashList[$j]}" ]];
+            then
+                rm Koleksi_$i
+                n=$((n-1))
+                count=$((count-1))
+        fi
+    done
+
+done
 ```
-Pada awalnya script akan membuat folder dengan ```mkdir``` untuk menjadi direktori penyimpanan gambar
 ```bash
-mkdir /home/gretzy/$(date +%d-%m-%Y)
+hashList=( $(for x in {1..23};do echo "0";done) )
+n=23
 ```
-Kemudian dengan ```while```, script akan mulai mengunduh sebanyak 23 foto. Terdapat 2 pengulangan dimana pengulangan pertama yaitu dari satu sampai sembilan dan yang kedua yaitu dari 10 hingga 23. Pengulangan tersebut dilakukan untuk menyimpan foto yang telah diunduh dengan format nama yang telah ditentukan
+Menginisialisasi `hashList` untuk menyimpan nilai hash dari gambar yang diunduh. Dan menginisialisasi nilai `n` sejumlah 23 kali sesuai dengan gambar yang ingin diunduh.
 ```bash
-count=1
-while [ $count -lt 10 ]
+for ((count=1;count<=n; count=count+1))
 do
-    wget https://loremflickr.com/320/240/kitten -O Koleksi_0$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
-    let count=count+1
-done
+    i=$(printf "%02d" $count) 
 
-while [ $count -le 23 ]
-do
-    wget https://loremflickr.com/320/240/kitten -O Koleksi_$count 2>> /home/gretzy/$(date +%d-%m-%Y)/Foto.log
-    let count=count+1
+    wget https://loremflickr.com/320/240/kitten -O "Koleksi_$i" 2>> Foto.log
+
+    ## Mendapatkan hash dari gambar yang baru di download
+    hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
+```
+Melakukan perulangan sebanyak gambar yang harus diunduh. Selanjutnya variable `i` untuk membentuk nama yang file yang ditentukan yaitu diawali 0 jika hanya satu digit. Selanjutnya menggunakan `wget` untuk mengunduh gambar pada link yang sudah diberikan dengan nama file yang sesuai dan lognya disimpan pada `Foto.log`.
+
+#### Kendala
+Yaitu sulitnya mencari pembanding file yang sama, namun ternyata menggunakan nilai hash bisa menjadikan pembeda pada tiap file.
+
+<img alt="Downloaded File 3A" src="Foto/3A.png">
+
+```bash
+    ## Mencari Hash yang sama
+    for ((j=count-1;j>=1;j=j-1))
+    do
+        if [[ "${hashList[$count]}" == "${hashList[$j]}" ]];
+            then
+                rm Koleksi_$i
+                n=$((n-1))
+                count=$((count-1))
+        fi
+    done
+
 done
 ```
-Karena ada kemungkinan foto yang diunduh merupakan foto yang sama, maka perlu menghapus foto yang duplikat dengan menggunakan ```fdupes```
-```bash
-fdupes -N -d /home/gretzy/soal-shift-sisop-modul-1-F04-2021/
-```
+Selanjutnya mengecek nilai hash pada gambar-gambar yang sudah diunduh sebelumnya. Jika nilai hash sama maka gambar yang diunduh akan dihapus, dan juga nilai `n` atau jumlah gambar yang harus diunduh akan berkurang, serta nilai `count` juga akan berkurang agar penamaan file tetap berurutan.
 ### Soal 3b
 Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
 ```bash
@@ -467,6 +487,11 @@ Kemudian file dengan pattern kucing dan kelinci dengan tanggal hari ini diubah f
 ```bash
 zip -rem Koleksi.zip Kucing_* Kelinci_* $(date -d today +"%d-%m-%Y") -P "$today"
 ```
+#### Kendala
+Memasukan semua file koleksi berdasarkan nama kedalam satu folder.
+
+<img alt="Zipped" src="Foto/3D.png">
+
 ### soal 3e
 Untuk Soal ini diminta untuk membuat script pada soal 3d berjalan sesuai jadwal yang diminta dan juga menjalankan perintah untuk **un-zip** file yang telah di zip dari script pada soal 3d
 ```
@@ -482,4 +507,7 @@ Dan _Command_ dibawah ini ini membuat jadwal setiap sore jam 18.00 di hari senin
 ```
 0 18 * * 1-5 unzip -P `date "+\%d-\%m-\%Y"` /home/gretzy/Koleksi.zip && rm /home/gretzy/Koleksi.zip
 ```
-```
+#### Kendala
+Perintah `unzip` harus dimasukan kedalam `cron` dikarenakan pada struktur file repository tidak ada file *soal3e.sh*.
+
+<img alt="Unzipped" src="Foto/3E.png">
