@@ -356,12 +356,6 @@ do
     hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
 ```
 Melakukan perulangan sebanyak gambar yang harus diunduh. Selanjutnya variable `i` untuk membentuk nama yang file yang ditentukan yaitu diawali 0 jika hanya satu digit. Selanjutnya menggunakan `wget` untuk mengunduh gambar pada link yang sudah diberikan dengan nama file yang sesuai dan lognya disimpan pada `Foto.log`.
-
-#### Kendala
-Yaitu sulitnya mencari pembanding file yang sama, namun ternyata menggunakan nilai hash bisa menjadikan pembeda pada tiap file.
-
-<img alt="Downloaded File 3A" src="Foto/3A.png">
-
 ```bash
     ## Mencari Hash yang sama
     for ((j=count-1;j>=1;j=j-1))
@@ -377,6 +371,12 @@ Yaitu sulitnya mencari pembanding file yang sama, namun ternyata menggunakan nil
 done
 ```
 Selanjutnya mengecek nilai hash pada gambar-gambar yang sudah diunduh sebelumnya. Jika nilai hash sama maka gambar yang diunduh akan dihapus, dan juga nilai `n` atau jumlah gambar yang harus diunduh akan berkurang, serta nilai `count` juga akan berkurang agar penamaan file tetap berurutan.
+
+#### Kendala
+Yaitu sulitnya mencari pembanding file yang sama, namun ternyata menggunakan nilai hash bisa menjadikan pembeda pada tiap file.
+
+<img alt="Downloaded File 3A" src="Foto/3A.png">
+
 ### Soal 3b
 Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
 ```bash
