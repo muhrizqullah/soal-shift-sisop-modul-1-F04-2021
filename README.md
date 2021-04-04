@@ -428,54 +428,104 @@ Untuk membuat membuat jadwal seperti pada soal, dapat menggunakan crontab untuk 
 Mencari cara untuk membandingkan setiap foto yang telah diunduh. Solusinya dengan membandingkan 
 nilai hash dengan setiap foto yang telah diunduh
 
+
 ### Soal 3c
-Soal ini ingin **mengunduh** 2 jenis foto yang berbeda(kucing dan kelinci) secara **bergantian** setiap harinya dan hasil unduhan disimpan dengan nama folder sesuai dengan jenis hewannya beserta tanggal mengunduhnya
+Soal ini ingin **mengunduh** 2 jenis foto yang berbeda(kucing dan kelinci) secara **bergantian** setiap harinya dan hasil unduhan disimpan dengan nama folder sesuai dengan jenis hewannya beserta tanggal mengunduhnya. Penyelesaian untuk soal ini mirip dengan soal 3b perbedaannya ada pada jenis foto hewan yang didownload yang harus bergantian setiap harinya. Kami menggunakan variabel **yesterday** untuk digunakan dalam membandingkan jenis file yang didownload pada hari sebelumnya
 ```bash
 #!/bin/bash
 
 yesterday=$(date -d yesterday +"%d-%m-%Y")
-today=$(date -d today +"%d-%m-%Y")
-
+hashList=( $(for x in {1..23};do echo "0";done) )
+n=23
 
 if [ -d /home/gretzy/"Kelinci_$yesterday" ]
-then
-mkdir /home/gretzy/Kucing_$(date +%d-%m-%Y)
-wget https://loremflickr.com/320/240/kitten -O Foto_Kucing  2>> /home/gretzy/Foto.log
-mv Foto_Kucing /home/gretzy/Kucing_$(date +%d-%m-%Y)/Foto_Kucing_$(date +%T)
-mv /home/gretzy/Foto.log /home/gretzy/Kucing_$(date +%d-%m-%Y)
-else
-mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
-wget https://loremflickr.com/320/240/bunny -O Foto_Kelinci  2>> /home/gretzy/Foto.log
-mv Foto_Kelinci /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto_Kelinci_$(date +%T)
-mv /home/gretzy/Foto.log /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+    then
+        mkdir /home/gretzy/Kucing_$(date +%d-%m-%Y)
+        for ((count=1;count<=n; count=count+1))
+        do
+            i=$(printf "%02d" $count) 
+
+            wget https://loremflickr.com/320/240/kitten -O "Koleksi_$i" 2>> /home/gretzy/Kucing_$(date +%d-%m-%Y)/Foto.log
+
+            ## Mendapatkan hash dari gambar yang baru di download
+            hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
+
+            ## Mencari Hash yang sama
+            for ((j=count-1;j>=1;j=j-1))
+            do
+                if [[ "${hashList[$count]}" == "${hashList[$j]}" ]];
+                    then
+                        rm Koleksi_$i
+                        n=$((n-1))
+                        count=$((count-1))
+                fi
+            done
+
+            mv Koleksi_$i /home/gretzy/Kucing_$(date +%d-%m-%Y)
+
+        done
+    else
+        mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+        for ((count=1;count<=n; count=count+1))
+        do
+            i=$(printf "%02d" $count) 
+
+            wget https://loremflickr.com/320/240/kitten -O "Koleksi_$i" 2>> /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto.log
+
+            ## Mendapatkan hash dari gambar yang baru di download
+            hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
+
+            ## Mencari Hash yang sama
+            for ((j=count-1;j>=1;j=j-1))
+            do
+                if [[ "${hashList[$count]}" == "${hashList[$j]}" ]];
+                    then
+                        rm Koleksi_$i
+                        n=$((n-1))
+                        count=$((count-1))
+                fi
+            done
+            
+            mv Koleksi_$i /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+        
+        done
+
 fi
 ```
-Untuk memudahkan melakukan pengecekan terhadap jenis hewan yang telah diunduh pada hari sebelumnya, maka dilakukan inisiasi untuk tanggal hari ini dan kemarin
-```bash
-yesterday=$(date -d yesterday +"%d-%m-%Y")
-today=$(date -d today +"%d-%m-%Y")
-```
-Dari ```yesterday``` maka dapat diperiksa foto jenis hewan apa yang telah diunduh pada hari sebelumnya.
-```bash
-if [ -d /home/gretzy/"Kelinci_$yesterday" ]
-```
-Kelompok kami memilih untuk memeriksa file yang telah diunduh kemarin merupakan foto kelinci atau bukan. kondisi ini masih dapat disesuaikan dengan keinginan programmernya. Jika kemarin script mengunduh foto kelinci, maka hari ini script akan mengunduh foto kucing
-```bash
-mkdir /home/gretzy/Kucing_$(date +%d-%m-%Y)
-wget https://loremflickr.com/320/240/kitten -O Foto_Kucing  2>> /home/gretzy/Foto.log
-mv Foto_Kucing /home/gretzy/Kucing_$(date +%d-%m-%Y)/Foto_Kucing_$(date +%T)
-mv /home/gretzy/Foto.log /home/gretzy/Kucing_$(date +%d-%m-%Y)
-```
-Proses pengunduhannya dimulai dengan ```mkdir``` untuk membuat folder penyimpanan dengan format nama yang telah ditentukan (jenis hewan_tanggal). Kemudian mengunduh foto dari link yang telah disediakan dan semuanya dicatat di file ```.log```. Dan Terakhir memindahkan foto yang diunduh dan file ```.log``` kefolder yang sesuai.
+Proses yang dilakukan sama dengan 3A & 3B dengan mengguakan nilai hash setiap gambar untuk mengetahui foto yang sama kemudian menghapusnya.Juga memindahkan ke folder yang diminta menggunakan command **mv** Proses pengunduhannya dimulai dengan ```mkdir``` untuk membuat folder penyimpanan dengan format nama yang telah ditentukan (jenis hewan_tanggal). Kemudian mengunduh foto dari link yang telah disediakan dan semuanya dicatat di file ```.log``` yang simpan pada folder yang sesuai. Kemudian menggunakan nilai hash untuk dibandingkan dengan foto sebelumnya & menghapus gambar yang sama.Dan Terakhir memindahkan foto yang diunduh ke folder yang sesuai.
 ```bash
 else
-mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
-wget https://loremflickr.com/320/240/bunny -O Foto_Kelinci  2>> /home/gretzy/Foto.log
-mv Foto_Kelinci /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto_Kelinci_$(date +%T)
-mv /home/gretzy/Foto.log /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+        mkdir /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+        for ((count=1;count<=n; count=count+1))
+        do
+            i=$(printf "%02d" $count) 
+
+            wget https://loremflickr.com/320/240/kitten -O "Koleksi_$i" 2>> /home/gretzy/Kelinci_$(date +%d-%m-%Y)/Foto.log
+
+            ## Mendapatkan hash dari gambar yang baru di download
+            hashList[$count]="$(md5sum Koleksi_$i | awk '{print $1;}')"
+
+            ## Mencari Hash yang sama
+            for ((j=count-1;j>=1;j=j-1))
+            do
+                if [[ "${hashList[$count]}" == "${hashList[$j]}" ]];
+                    then
+                        rm Koleksi_$i
+                        n=$((n-1))
+                        count=$((count-1))
+                fi
+            done
+            
+            mv Koleksi_$i /home/gretzy/Kelinci_$(date +%d-%m-%Y)
+        
+        done
+
 fi
 ```
 Dan berlaku juga untuk sebaliknya, jika foto kucing yang telah diunduh kemarin maka hari ini script akan mengunduh foto kelinci dengan _command_ yang sama seperti yang sudah dijelaskan sebelumnya
+
+#### Kendala
+Untuk kesulitannya mencari pembanding untuk mengetahui gambar yang sama, beruntung ada nilai hash yang bisa digunakan. Kemudian mencari pembanding hari sebelumnya karena kalau menggunakan modulo tanggal tentu sulit apabila hari ini ganjil besok tanggalnya juga ganjil. Untuk bisa dengan membandingkan beruntung ada command **-d/home/gretzy/"Kelinci_$yesterday"** untuk mengecek folder yang sudah dibuat sebelumnya.
 
 ### Soal 3d
 
