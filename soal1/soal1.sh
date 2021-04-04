@@ -13,11 +13,13 @@ grep -o 'The.*updating' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq 
 grep -o 'Ticket.*exist' /home/gretzy/soal-shift-1-local/soal1/syslog.log | uniq -c
 
 #1c
+echo -e "Error \n"
 grep -o 'ERROR.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listerror.log
-grep -o '(.*)' /home/gretzy/listerror.log | sort | uniq -c
+grep -o '(.*)' /home/gretzy/listerror.log | tr -d ')' | tr -d '('| sort | uniq -c
 
+echo -e "Info \n"
 grep -o 'INFO.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listinfo.log
-grep -o '(.*)' /home/gretzy/listinfo.log | sort | uniq -c
+grep -o '(.*)' /home/gretzy/listinfo.log | tr -d ')' | tr -d '('| sort | uniq -c
 
 #1d
 echo "Error,Count" > error_message.csv

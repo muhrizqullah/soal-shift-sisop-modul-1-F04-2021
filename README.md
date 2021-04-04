@@ -39,12 +39,15 @@ Kesulitan untuk melakukan perhitungan tiap jenis *ERROR*, solusinya menggunakan 
 ### Soal 1C
 Pada soal ini kita harus menampilkan informasi **Berapa kali tiap user mendapati ERROR dan INFO**.
 ```bash
+echo -e "Error \n"
 grep -o 'ERROR.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listerror.log
-grep -o '(.*)' /home/gretzy/listerror.log | sort | uniq -c
+grep -o '(.*)' /home/gretzy/listerror.log | tr -d ')' | tr -d '('| sort | uniq -c
+
+echo -e "Info \n"
 grep -o 'INFO.*' /home/gretzy/soal-shift-1-local/soal1/syslog.log > /home/gretzy/listinfo.log
-grep -o '(.*)' /home/gretzy/listinfo.log | sort | uniq -c
+grep -o '(.*)' /home/gretzy/listinfo.log | tr -d ')' | tr -d '('| sort | uniq -c
 ```
-Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan menyimpannya pada sebuah file. Lalu menggunakan `-o '(.*)'` untuk mendapat informasi nama user. Selanjutnya kita `sort` dan menghitung kemunculan tiap user dengan `uniq -c`. Output langsung untuk *ERROR* dan *INFO* denga user pertama adalah `(ac)`.
+Pertama kita mencari setiap jenis *ERROR* dan *INFO* sama seperti Soal 1A dan menyimpannya pada sebuah file. Lalu menggunakan `-o '(.*)'` untuk mendapat informasi nama user. Lalu kita *truncate* yang tidak diperlukan. Selanjutnya kita `sort` dan menghitung kemunculan tiap user dengan `uniq -c`.
 
 <img alt="Output 1C" src="Foto/1C.png">
 
