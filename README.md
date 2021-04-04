@@ -56,14 +56,15 @@ Kesulitan untuk memisahkan *ERROR* dan *INFO*, solusinya ditaruh disebuah file t
 Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
 ```bash
 #!/bin/bash
-
-max=0
-ID=0
-
-awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } 
-{ if(($18-$21) > 0 ) if( ($21/($18-$21)) > max) max=$21/($18-$21);ID=$1} 
-END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
-/home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+awk 'BEGIN { FS="\t"; ORS="\r\n"; max=0; ID=0 } 
+{ 
+        cost=$18-$21;
+        if(cost>0)
+                profit=($21/cost)*100;
+        else
+                profit=0;
+	if(profit>=max) {ID=$1; max=profit;} } 
+END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max  "%."}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
 Untuk mencari profit percentage dan ID, maka perlu memisahkan setiap kolom dari data yang telah disediakan dan mulai mencari data sesuai dengan soal yang diberikan. Pertama, variabel ``max`` dan ``ID`` di set 0 sebagai inisiasi.
 ```awk
@@ -71,14 +72,22 @@ awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" }
 ```
 _Command_ diatas mencari _File Separator_ dari file ```.tsv``` yang telah disediakan (yaitu tab atau "\t") dan merubah _Output File Separator_ dengan tanda koma (",") serta untuk _Output Record Separtor_ diatur agar setiap field diberi newline.
 ```awk
-{ if(($18-$21) > 0 ) if( ($21/($18-$21)) > max) max=$21/($18-$21);ID=$1}
+cost=$18-$21;
+        if(cost>0)
+                profit=($21/cost)*100;
+        else
+                profit=0;
+if(profit>=max) {ID=$1; max=profit;} } 
 ```
-Cara untuk mencari profit dan ID ialah dengan menggunakan rumus yang tertera pada soal dan membandingkannya pada setiap field. Jika memenuhi kondisi if tersebut, maka program akan menyimpan nilai profit dan ID tersebut.
+Cara untuk mencari profit dan ID ialah dengan menggunakan rumus yang tertera pada soal dan membandingkannya pada setiap field, namun harus dicek pembagi tidak boleh 0. Jika memenuhi kondisi if tersebut, maka program akan menyimpan nilai profit dan ID tersebut.
 ```awk
 END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' 
-/home/gretzy/soal-shift-1-local/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+/home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv > /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
 Diakhir program akan mencetak output seperti yang diminta dan menyimpan output tersebut ke ```hasil.txt```
+
+#### Kendala
+Kesulitan karena ada error jika pembagi dari formula yang diberikan sama dengan 0. Sehingga hasil tidak akurat.
 
 ### Soal 2B
 Pada soal ini kita mencari **Nama customer yang melakukan transaksi pada tahun _2017_ di _Albuquerque_**.
@@ -87,6 +96,10 @@ awk 'BEGIN { print "\nDaftar nama customer di Albuquerque pada tahun 2017 antara
 {split($3, tglArr, "-"); if (tglArr[3] == 17 && $10 == "Albuquerque") print $7  }  ' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv | uniq >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
 Menggunakan fungsi `split` kita bisa mengambil informasi tahunnya saja dari tanggal. Lalu menggunakan `uniq` agar tidak ada redundan pada output yang diberikan.
+
+#### Kendala
+Kesulitan karena data yang dibutuhkan dari tanggal hanya tahunnya, sehingga harus menggunakan fungsi `split`.
+
 ### Soal 2C
 Pada soal ini kita mencari **Segmen dengan penjualan _paling sedikit_ dan jumlah transaksinya**
 ```bash
@@ -125,6 +138,7 @@ print "\nTipe segmen customer yang penjualannya paling sedikit adalah " segment 
 }' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
 Pertama kita melakukan perhitungan dari transaksi yang berlangsung pada tiap segmennya. Lalu akan mengecek mana yang paling kecil dan menjadikannya sebagai output.
+
 ### Soal 2D
 Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**. Variabel **South,West,East,Central** tersebut digunakan untuk menyimpan total profit region tersebut. Kemudian **min** kita gunakan untuk menyimpan **profit region terlendah** & **Wilayah** untuk menyimpan **nama region terendah**
 ```bash
@@ -205,7 +219,7 @@ print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\np
 ### Soal 2E
 Menampilkan output pada file hasil.txt
 ```
-Transaksi terakhir dengan profit percentage terbesar yaitu 9994
+Transaksi terakhir dengan profit percentage terbesar yaitu 9952
 dengan persentase 100%.
 
 Daftar nama customer di Albuquerque pada tahun 2017 antara lain:
@@ -218,7 +232,7 @@ Tipe segmen customer yang penjualannya paling sedikit adalah Home Office
 dengan 1783 transaksi.
 
 Wilayah bagian (region) yang memiliki total keuntungan (profit) yang
-paling sedikit adalah East dengan total keuntungan -2268
+paling sedikit adalah Central dengan total keuntungan 39706.4
 
 ```
 ## Soal 3
