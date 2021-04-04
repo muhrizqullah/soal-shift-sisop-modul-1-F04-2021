@@ -527,6 +527,8 @@ Dan berlaku juga untuk sebaliknya, jika foto kucing yang telah diunduh kemarin m
 #### Kendala
 Untuk kesulitannya mencari pembanding untuk mengetahui gambar yang sama, beruntung ada nilai hash yang bisa digunakan. Kemudian mencari pembanding hari sebelumnya karena kalau menggunakan modulo tanggal tentu sulit apabila hari ini ganjil besok tanggalnya juga ganjil. Untuk bisa dengan membandingkan beruntung ada command **-d/home/gretzy/"Kelinci_$yesterday"** untuk mengecek folder yang sudah dibuat sebelumnya.
 
+<img alt="Output 3C" src="Foto/3C.png">
+
 ### Soal 3d
 
 Soal ini ingin **memindahkan seluruh folder ke zip** yang diberi nama “Koleksi.zip” dan *mengunci* zip tersebut dengan **password** berupa tanggal saat ini dengan format "MMDDYYYY"
