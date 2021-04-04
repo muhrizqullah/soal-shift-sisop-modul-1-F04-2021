@@ -377,7 +377,7 @@ Yaitu sulitnya mencari pembanding file yang sama, namun ternyata menggunakan nil
 
 <img alt="Downloaded File 3A" src="Foto/3A.png">
 
-### Soal 3b
+### Soal 3B
 Penyelesaian untuk soal ini mirip dengan soal 3a, tetapi foto yang diunduh harus dipindahkan ke folder yang diminta dan membuat jadwal untuk menjalankan script tersebut
 ```bash
 #!/bin/bash
@@ -410,18 +410,24 @@ do
 
 done
 ```
-Karena harus memindahkan ke foldere yang diminta, maka script diberi tambahan _command_ ```mv```
+Pada Awal, program akan membuat folder untuk menyimpan foto dengan cara
 ```bash
-mv Koleksi_0$count /home/gretzy/$(date +%d-%m-%Y)
+mkdir /home/gretzy/$(date +%d-%m-%Y)
 ```
-dan
+Dengan cara yang sama pada soal 3A, Setiap foto yang telah diunduh akan dibandingkan nilai hash yang dimiliki dengan nilai hash foto sebelumnya. Karena harus memindahkan ke folder yang diminta, maka script diberi tambahan _command_ ```mv```
 ```bash
-mv Koleksi_$count /home/gretzy/$(date +%d-%m-%Y)
+mv Koleksi_$i /home/gretzy/$(date +%d-%m-%Y)
 ```
 Untuk membuat membuat jadwal seperti pada soal, dapat menggunakan crontab untuk menjalankan script yang telah dibuat.
 ```
 0 20 1/7,2/7 * * bash /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal3/soal3b.sh
 ```
+<img alt="Output 3B" src="Foto/3B.png">
+
+#### Kendala
+Mencari cara untuk membandingkan setiap foto yang telah diunduh. Solusinya dengan membandingkan 
+nilai hash dengan setiap foto yang telah diunduh
+
 ### Soal 3c
 Soal ini ingin **mengunduh** 2 jenis foto yang berbeda(kucing dan kelinci) secara **bergantian** setiap harinya dan hasil unduhan disimpan dengan nama folder sesuai dengan jenis hewannya beserta tanggal mengunduhnya
 ```bash
