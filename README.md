@@ -126,47 +126,82 @@ print "\nTipe segmen customer yang penjualannya paling sedikit adalah " segment 
 ```
 Pertama kita melakukan perhitungan dari transaksi yang berlangsung pada tiap segmennya. Lalu akan mengecek mana yang paling kecil dan menjadikannya sebagai output.
 ### Soal 2D
-Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**
+Pada soal ini kita mencari **Region dengan keuntungan _paling sedikit_ dan juga berapa keuntungannya**. Variabel **South,West,East,Central** tersebut digunakan untuk menyimpan total profit region tersebut. Kemudian **min** kita gunakan untuk menyimpan **profit region terlendah** & **Wilayah** untuk menyimpan **nama region terendah**
+```bash
+#!/bin/bash
+
+South=0
+West=0
+East=0
+Central=0;
+min=0
+Wilayah="a"
+
+awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
+if($13=="South")South=South+$21;
+else if($13=="West")West=West+$21;
+else if($13=="East")East=East+$21;
+else if($13=="Central")Central=Central+$21;
+}
+END{
+if(West<South&&West<East&&West<Central){
+        Wilayah="West"
+        min=West
+        }
+else if(South<West&&South<East&&South<Central){
+        Wilayah="South"
+        min=South
+        }
+else if(East<South&&East<West&&East<Central){
+        Wilayah="East"
+        min=East
+        }
+else if(Central<South&&Central<West&&Central<East){
+        Wilayah="Central"
+        min=Central
+        }
+print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " Wilayah " dengan total keuntungan " min
+}' Laporan-TokoShiSop.tsv >> hasil.txt                                                              
+```
+Pertama-tama dilalukakan perhitungan nilai dengan **if else** apabila **13=="nama_region"** maka profit tersebut ditambahkan ke region yang memenuhi seleksi tadi.  
 ```bash
 South=0
 West=0
 East=0
 Central=0;
-top=10000000000000000000000000000000000
-wilayah="a"
+min=0
+Wilayah="a"
 
 awk 'BEGIN { FS="\t"; OFS=","; ORS="\r\n" } {
-if(top>South){
-  wilayah="South"
-  top=South
+if($13=="South")South=South+$21;
+else if($13=="West")West=West+$21;
+else if($13=="East")East=East+$21;
+else if($13=="Central")Central=Central+$21;
 }
-else if(top>West){
-  wilayah="West"
-  top=West
-}
-else if(top>East){
-  wilayah="East"
-  top=East
-}
-else if(top>Central){
- wilayah="Central"
- top=Central
-}
-else if($13=="South")
-    South=South+$21;
-else if($13=="West")
-    West=West+$21;
-else if($13=="East")
-     East=East+$21;
-else if($13=="Central")
-      Central=Central+$21;
-}
-
-END{
-print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " wilayah " dengan total keuntungan " top
-}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 ```
-Sama seperti soal sebelumnya, akan dilakukan perhitungan lalu dicek mana Region yang menghasilkan profit paling kecil untuk dijadikan sebagai output.
+Setelah itu dibuat if else untuk menyeleksi ,apabila **region a < region b && region a < region c && region a < region d** maka region a tersebut yang **kita akan tampilkan nama dan profitnya**
+```bash
+END{
+if(West<South&&West<East&&West<Central){
+        Wilayah="West"
+        min=West
+        }
+else if(South<West&&South<East&&South<Central){
+        Wilayah="South"
+        min=South
+        }
+else if(East<South&&East<West&&East<Central){
+        Wilayah="East"
+        min=East
+        }
+else if(Central<South&&Central<West&&Central<East){
+        Wilayah="Central"
+        min=Central
+        }
+print "\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang\npaling sedikit adalah " Wilayah " dengan total keuntungan " min
+```
+
+
 ### Soal 2E
 Menampilkan output pada file hasil.txt
 ```
