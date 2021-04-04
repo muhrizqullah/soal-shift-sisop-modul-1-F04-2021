@@ -94,6 +94,54 @@ Cara ini juga berlaku untuk jenis error lainnya.
 #### Kendala
 Masih belum mengetahui cara menyimpan list nama setiap jenis Error yang ada
 
+### Soal 1E
+Soal ini meminta output soal 1C dituliskan ke dalam file user_statistic.csv dengan header Username,INFO,ERROR diurutkan berdasarkan username secara ascending. Seperti contoh berikut:
+```
+Username,INFO,ERROR
+kaori02,6,0
+kousei01,2,2
+ryujin.1203,1,3
+```
+maka untuk penyelesaian soal 1E adalah sebagai berikut,
+```bash
+echo Username,INFO,ERROR > user_statistic.csv
+listnama=$(grep -oE '(\(.*\))' syslog.log | tr -d ')' | tr -d '(' | sort | uniq)
+echo "$listnama" |
+while read user
+do
+    Info=$(grep -c "INFO.*($user)" syslog.log)
+    Error=$(grep -c "ERROR.*($user)" syslog.log)
+    echo "$user,$Info,$Error" >> user_statistic.csv
+done
+```
+Diawali dengan membuat header untuk file .csv
+```
+echo Username,INFO,ERROR > user_statistic.csv
+```
+Hal yang pertama dilakukan ialah membuat list nama yang terdapat pada ```syslog.log``` dengan menggunakan grep serta regex ```(\(.*\))```. Kemudian hasil grep tersebut masih terdapat tanda kurung "(..)", contoh (budi). Untuk menghilangkan tanda kurung tersebut, maka menggunakan ```tr -d ')'``` dan ```tr -d ')'```. ```tr -d``` Command ini berguna untuk menghapus sebuah karakter dan disini karakter yang akan dihapus adalah tanda kurung "(...)". Setelah itu hasil grep akan diurutkan dengan ```sort``` dan hanya mengambil nama yang unik dengan ```uniq```
+```bash
+listnama=$(grep -oE '(\(.*\))' syslog.log | tr -d ')' | tr -d '(' | sort | uniq)
+```
+Dengan looping ```while``` program dapat mencari jumlah dari error dan info dari setiap nama. Kemudian menggunakan ```grep -c``` untuk mengitung jumlah dari setiap error dan info. Untuk menghitung jumlah Error atau pada nama tertentu mengunakan
+```bash
+"INFO.*($user)"
+```
+atau
+```bash
+"ERROR.*($user)"
+```
+jumlah error atau info tersebut akan disimpan di variabel yang tersedia dan dicetak di file .csv yang diminta. Berikut implementasinya
+```bash
+Info=$(grep -c "INFO.*($user)" syslog.log)
+Error=$(grep -c "ERROR.*($user)" syslog.log)
+echo "$user,$Info,$Error" >> user_statistic.csv
+```
+<img alt="Output 1E" src="Foto/1E.png">
+
+#### Kendala
+Sempat Kebingungan cara menghitung jumlah error/info berdasarkan list nama yang telah diperoleh
+
+
 ## Soal 2
 ### Soal 2A
 Soal ini ingin mencari **jumlah _profit percentage terbesar_** dan **Row _ID_** 
