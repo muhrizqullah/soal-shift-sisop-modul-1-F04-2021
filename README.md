@@ -89,7 +89,7 @@ printf "Timeout while retrieving information,$errCount\n" >> error_message.csv
 ```
 Cara ini juga berlaku untuk jenis error lainnya.
 
-<img alt="Output 1D" src="Foto/1C.png">
+<img alt="Output 1D" src="Foto/1D.png">
 
 #### Kendala
 Masih belum mengetahui cara menyimpan list nama setiap jenis Error yang ada
