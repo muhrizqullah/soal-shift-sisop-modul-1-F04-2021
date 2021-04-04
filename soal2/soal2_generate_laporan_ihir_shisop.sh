@@ -2,9 +2,14 @@
 #!/bin/bash
 
 awk 'BEGIN { FS="\t"; ORS="\r\n"; max=0; ID=0 } 
-{ profit=($21/($18-$21)); 
-	if(profit>=max) {max=profit; ID=$1} } 
-END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max*100  "%."}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
+{ 
+        cost=$18-$21;
+        if(cost>0)
+                profit=($21/cost)*100;
+        else
+                profit=0;
+	if(profit>=max) {ID=$1; max=profit;} } 
+END{print "Transaksi terakhir dengan profit percentage terbesar yaitu " ID "\ndengan persentase " max  "%."}' /home/gretzy/soal-shift-1-local/soal2/Laporan-TokoShiSop.tsv >> /home/gretzy/soal-shift-sisop-modul-1-F04-2021/soal2/hasil.txt
 
 
 #no 2.b
